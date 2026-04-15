@@ -1,0 +1,6 @@
+[submodule "mobilesco-back"]
+	path = mobilesco-back
+	url = https://github.com/NahumAgp/mobilesco-back.git
+[submodule "mobilesco-front"]
+	path = mobilesco-front
+	url = https://github.com/NahumAgp/mobilesco-front.git
