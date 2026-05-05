@@ -1,0 +1,5 @@
+.git
+mobilesco-back/target
+mobilesco-front/node_modules
+mobilesco-front/dist
+uploads
