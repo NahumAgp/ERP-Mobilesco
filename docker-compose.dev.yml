@@ -25,6 +25,8 @@ services:
       - "8082:8081"
     env_file:
       - .env.dev
+    environment:
+      SPRING_PROFILE: ${SPRING_PROFILE:-dev}
     volumes:
       - ./uploads:/app/uploads
     depends_on:

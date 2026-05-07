@@ -26,6 +26,7 @@ services:
     ports:
       - "8082:8081"
     environment:
+      SPRING_PROFILE: ${SPRING_PROFILE:-dev}
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       DB_USERNAME: ${MYSQL_USER:-mobilesco_user}
       DB_PASSWORD: ${MYSQL_PASSWORD:-mobilescopassword}

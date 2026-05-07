@@ -22,6 +22,7 @@ services:
     build: ./mobilesco-back
     container_name: mobilesco-backend
     environment:
+      SPRING_PROFILE: ${SPRING_PROFILE:-prod}
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       DB_USERNAME: ${MYSQL_USER:-mobilesco_user}
       DB_PASSWORD: ${MYSQL_PASSWORD:-mobilescopassword}
