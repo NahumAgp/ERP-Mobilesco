@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   db:
     image: mysql:8.0
@@ -31,7 +29,7 @@ services:
       JWT_SECRET_BASE64: ${JWT_SECRET_BASE64}
       UPLOAD_DIR: /app/uploads
     volumes:
-      - ./uploads:/app/uploads
+      - uploads_data:/app/uploads
     networks:
       - mobilesco_network
     deploy:
@@ -41,7 +39,7 @@ services:
   frontend:
     image: mobilesco-frontend:latest
     volumes:
-      - ./uploads:/usr/share/nginx/html/uploads:ro
+      - uploads_data:/usr/share/nginx/html/uploads:ro
     networks:
       - mobilesco_network
       - traefik_public
@@ -70,3 +68,4 @@ volumes:
   mysql_data:
     external: true
     name: mobilesco_mysql_data
+  uploads_data:
