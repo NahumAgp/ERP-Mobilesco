@@ -33,6 +33,7 @@ docker network ls
 ```
 
 6. Si el volumen de MySQL ya existe, déjalo tal cual. El stack lo reutiliza como `mobilesco_mysql_data`.
+7. La red interna del stack se crea como `mobilesco_overlay`, para evitar chocar con redes viejas de Compose.
 
 Despliegue:
 

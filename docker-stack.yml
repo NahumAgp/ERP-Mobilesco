@@ -61,6 +61,7 @@ networks:
   mobilesco_network:
     driver: overlay
     attachable: true
+    name: mobilesco_overlay
   traefik_public:
     external: true
     name: ${TRAEFIK_NETWORK:-MobilescoNet}
