@@ -1,4 +1,4 @@
-ardar # Docker
+# Docker
 
 ## Desarrollo
 
@@ -17,9 +17,17 @@ Servicios:
 
 ## Produccion
 
-1. Copia `.env.example` a `.env` y cambia secretos, passwords y certificados.
-2. Coloca los certificados en `./ssl` o ajusta `SSL_CERTS_DIR`.
-3. Levanta:
+Antes de subir al servidor:
+
+1. Copia `.env.example` a `.env`.
+2. Define `JWT_SECRET_BASE64` con un secreto real en Base64.
+3. Ajusta `MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `MYSQL_USER` y `MYSQL_PASSWORD` si tu servidor usa otros valores.
+4. Coloca los certificados en `./ssl` con estos nombres:
+   - `fullchain.pem`
+   - `privkey.pem`
+5. Si tus certificados están en otra ruta, ajusta `SSL_CERTS_DIR`.
+
+Levanta el stack:
 
 ```powershell
 docker compose -f docker-compose.prod.yml up -d --build
@@ -38,6 +46,9 @@ docker compose --env-file .env.dev -f docker-compose.dev.yml ps
 docker logs --tail 120 mobilesco-backend-dev
 docker logs --tail 120 mobilesco-frontend-dev
 docker compose --env-file .env.dev -f docker-compose.dev.yml down
+docker compose -f docker-compose.prod.yml ps
+docker logs --tail 120 mobilesco-backend
+docker logs --tail 120 mobilesco-frontend
 ```
 
 Los archivos subidos se montan en `./uploads` y se sirven desde `/uploads`.
