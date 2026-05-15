@@ -26,14 +26,15 @@ Antes de desplegar:
 3. Ajusta `MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `MYSQL_USER` y `MYSQL_PASSWORD` si tu servidor usa otros valores.
 4. Define `TRAEFIK_NETWORK` con el nombre real de la red de Traefik del VPS.
    - Por defecto usamos `MobilescoNet`, que es la red que ya tienes en Portainer.
-5. Si no sabes el nombre, ejecútalo en el servidor:
+5. El host principal del sitio es `erp.mobilesco.cloud`.
+6. Si no sabes el nombre, ejecútalo en el servidor:
 
 ```powershell
 docker network ls
 ```
 
-6. Si el volumen de MySQL ya existe, déjalo tal cual. El stack lo reutiliza como `mobilesco_mysql_data`.
-7. La red interna del stack se crea como `mobilesco_overlay`, para evitar chocar con redes viejas de Compose.
+7. Si el volumen de MySQL ya existe, déjalo tal cual. El stack lo reutiliza como `mobilesco_mysql_data`.
+8. La red interna del stack se crea como `mobilesco_overlay`, para evitar chocar con redes viejas de Compose.
 
 Despliegue:
 
