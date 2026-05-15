@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER:-mobilesco_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mobilescopassword}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - mobilesco_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      restart_policy:
+        condition: any
+
+  backend:
+    image: mobilesco-backend:latest
+    environment:
+      SPRING_PROFILE: ${SPRING_PROFILE:-prod}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://db:3306/mobilesco?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      DB_USERNAME: ${MYSQL_USER:-mobilesco_user}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-mobilescopassword}
+      JWT_SECRET_BASE64: ${JWT_SECRET_BASE64}
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - mobilesco_network
+    deploy:
+      restart_policy:
+        condition: any
+
+  frontend:
+    image: mobilesco-frontend:latest
+    volumes:
+      - ./uploads:/usr/share/nginx/html/uploads:ro
+    networks:
+      - mobilesco_network
+      - traefik_public
+    deploy:
+      restart_policy:
+        condition: any
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=${TRAEFIK_NETWORK:-traefik_public}
+        - traefik.http.routers.mobilesco.rule=Host(`mobilesco.cloud`,`www.mobilesco.cloud`)
+        - traefik.http.routers.mobilesco.entrypoints=websecure
+        - traefik.http.routers.mobilesco.tls=true
+        - traefik.http.routers.mobilesco.service=mobilesco-web
+        - traefik.http.services.mobilesco-web.loadbalancer.server.port=80
+
+networks:
+  mobilesco_network:
+    driver: overlay
+    attachable: true
+  traefik_public:
+    external: true
+    name: ${TRAEFIK_NETWORK:-traefik_public}
+
+volumes:
+  mysql_data:
+    external: true
+    name: mobilesco_mysql_data

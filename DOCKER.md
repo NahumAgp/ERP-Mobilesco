@@ -17,34 +17,45 @@ Servicios:
 
 ## Produccion
 
-Antes de subir al servidor:
+En el VPS usamos **Swarm + Traefik**. Traefik ya ocupa `80/443`, así que el stack de Mobilesco no debe publicar esos puertos directamente.
+
+Antes de desplegar:
 
 1. Copia `.env.example` a `.env`.
 2. Define `JWT_SECRET_BASE64` con un secreto real en Base64.
 3. Ajusta `MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `MYSQL_USER` y `MYSQL_PASSWORD` si tu servidor usa otros valores.
-4. Coloca los certificados en `./ssl` con estos nombres:
-   - `fullchain.pem`
-   - `privkey.pem`
-5. Si tus certificados están en otra ruta, ajusta `SSL_CERTS_DIR`.
-6. Si ya existe el volumen de MySQL del servidor, déjalo tal cual. El compose de producción lo reutiliza como `mobilesco_mysql_data`.
-
-Levanta el stack:
+4. Define `TRAEFIK_NETWORK` con el nombre real de la red de Traefik del VPS.
+5. Si no sabes el nombre, ejecútalo en el servidor:
 
 ```powershell
-docker compose -f docker-compose.prod.yml up -d --build
+docker network ls
 ```
 
-Si ya había un stack anterior corriendo, primero apágalo sin borrar volúmenes:
+6. Si el volumen de MySQL ya existe, déjalo tal cual. El stack lo reutiliza como `mobilesco_mysql_data`.
+
+Despliegue:
 
 ```powershell
-docker compose -f docker-compose.prod.yml down
+docker build -t mobilesco-backend:latest ./mobilesco-back
+docker build -t mobilesco-frontend:latest ./mobilesco-front
+docker stack deploy -c docker-stack.yml mobilesco
+```
+
+Actualización típica:
+
+```powershell
+git pull origin main
+git submodule update --init --recursive
+docker build -t mobilesco-backend:latest ./mobilesco-back
+docker build -t mobilesco-frontend:latest ./mobilesco-front
+docker stack deploy -c docker-stack.yml mobilesco
 ```
 
 Servicios:
 
-- Frontend/Nginx: puertos 80 y 443
-- Backend: red interna Docker
-- MySQL: red interna Docker
+- Frontend: expuesto por Traefik
+- Backend: red interna Swarm
+- MySQL: red interna Swarm
 
 ## Comandos utiles
 
@@ -56,6 +67,10 @@ docker compose --env-file .env.dev -f docker-compose.dev.yml down
 docker compose -f docker-compose.prod.yml ps
 docker logs --tail 120 mobilesco-backend
 docker logs --tail 120 mobilesco-frontend
+docker stack ls
+docker service ls | findstr mobilesco
+docker service logs mobilesco_backend
+docker service logs mobilesco_frontend
 ```
 
 Los archivos subidos se montan en `./uploads` y se sirven desde `/uploads`.
