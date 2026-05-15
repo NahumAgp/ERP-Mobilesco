@@ -26,11 +26,18 @@ Antes de subir al servidor:
    - `fullchain.pem`
    - `privkey.pem`
 5. Si tus certificados están en otra ruta, ajusta `SSL_CERTS_DIR`.
+6. Si ya existe el volumen de MySQL del servidor, déjalo tal cual. El compose de producción lo reutiliza como `mobilesco_mysql_data`.
 
 Levanta el stack:
 
 ```powershell
 docker compose -f docker-compose.prod.yml up -d --build
+```
+
+Si ya había un stack anterior corriendo, primero apágalo sin borrar volúmenes:
+
+```powershell
+docker compose -f docker-compose.prod.yml down
 ```
 
 Servicios:
