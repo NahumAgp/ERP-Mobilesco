@@ -50,7 +50,7 @@ services:
         condition: any
       labels:
         - traefik.enable=true
-        - traefik.docker.network=${TRAEFIK_NETWORK:-traefik_public}
+        - traefik.docker.network=${TRAEFIK_NETWORK:-MobilescoNet}
         - traefik.http.routers.mobilesco.rule=Host(`mobilesco.cloud`,`www.mobilesco.cloud`)
         - traefik.http.routers.mobilesco.entrypoints=websecure
         - traefik.http.routers.mobilesco.tls=true
@@ -63,7 +63,7 @@ networks:
     attachable: true
   traefik_public:
     external: true
-    name: ${TRAEFIK_NETWORK:-traefik_public}
+    name: ${TRAEFIK_NETWORK:-MobilescoNet}
 
 volumes:
   mysql_data:

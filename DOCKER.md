@@ -25,6 +25,7 @@ Antes de desplegar:
 2. Define `JWT_SECRET_BASE64` con un secreto real en Base64.
 3. Ajusta `MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `MYSQL_USER` y `MYSQL_PASSWORD` si tu servidor usa otros valores.
 4. Define `TRAEFIK_NETWORK` con el nombre real de la red de Traefik del VPS.
+   - Por defecto usamos `MobilescoNet`, que es la red que ya tienes en Portainer.
 5. Si no sabes el nombre, ejecútalo en el servidor:
 
 ```powershell
