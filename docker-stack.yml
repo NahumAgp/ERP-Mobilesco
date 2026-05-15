@@ -49,9 +49,10 @@ services:
       labels:
         - traefik.enable=true
         - traefik.docker.network=${TRAEFIK_NETWORK:-MobilescoNet}
-        - traefik.http.routers.mobilesco.rule=Host(`erp.mobilesco.cloud`,`mobilesco.cloud`,`www.mobilesco.cloud`)
+        - traefik.http.routers.mobilesco.rule=Host(`erp.mobilesco.cloud`) || Host(`mobilesco.cloud`) || Host(`www.mobilesco.cloud`)
         - traefik.http.routers.mobilesco.entrypoints=websecure
         - traefik.http.routers.mobilesco.tls=true
+        - traefik.http.routers.mobilesco.priority=100
         - traefik.http.routers.mobilesco.service=mobilesco-web
         - traefik.http.services.mobilesco-web.loadbalancer.server.port=80
 
