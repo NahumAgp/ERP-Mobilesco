@@ -3,3 +3,11 @@
 uploads/
 ssl/
 backups/
+
+# Entornos locales y secretos
+.env
+.env.local
+.env.*.local
+
+# Archivos de entorno de herramientas locales
+.codex/
